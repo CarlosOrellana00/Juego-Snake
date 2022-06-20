@@ -29,7 +29,7 @@ function setup() {
   derecha = createVector(1, 0)
   izquierda = createVector(-1, 0)
 }
-
+// ajustar tamaño de pagina a escala
 function windowResized() {
   let escala = windowWidth / width
   if (escala >= 1) {
@@ -38,10 +38,11 @@ function windowResized() {
   canvas.style("width", width * escala + "px")
   canvas.style("height", height * escala + "px")
 }
-
+// vista en pantalla
 function draw() {
   background("black")
   serpiente.dibujar()
+  // comida
   fill("crimson")
   rect(comida.x * lado, comida.y * lado, lado, lado)
   if (serpiente.posicion.dist(comida) == 0) {
@@ -49,11 +50,13 @@ function draw() {
     posicionarComida()
   }
 }
-
+// Movimiento por teclas
 function keyPressed() {
+  // Reinicio
   if (!isLooping()) {
     juegoNuevo()
   }
+  // movimiento flechas
   switch (keyCode) {
     case UP_ARROW:
       if (serpiente.cola.length && serpiente.aceleracion == abajo) {
@@ -113,6 +116,7 @@ function Serpiente() {
   this.aceleracion = createVector()
   this.cola = []
   this.tamaño = 0
+  // colicion
   this.sistemaDeChoques = function() {
     if (this.posicion.x < 0 || this.posicion.y < 0) {
       return true
@@ -120,6 +124,7 @@ function Serpiente() {
     if (this.posicion.x >= columnas || this.posicion.y >= filas) {
       return true
     }
+    // colicion con la cola
     for (const c of this.cola) {
       if (this.posicion.equals(c)) {
         return true
@@ -127,6 +132,7 @@ function Serpiente() {
     }
     return false
   }
+  // colicion con los bordes
   this.dibujar = function() {
     fill("white")
     rect(
@@ -135,6 +141,7 @@ function Serpiente() {
       lado,
       lado
     )
+    // dibujar cola
     for (const c of this.cola) {
       rect(
         constrain(c.x, 0, columnas - 1) * lado,
@@ -144,6 +151,7 @@ function Serpiente() {
       )
     }
     juegoTerminado()
+    // cola de serpiente
     this.cola.push(this.posicion.copy())
     if (this.cola.length > this.tamaño) {
       this.cola.splice(0, 1)
